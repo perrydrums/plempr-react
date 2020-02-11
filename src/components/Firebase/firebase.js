@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -26,10 +27,21 @@ class Firebase {
 
     doSignOut = () => this.auth.signOut();
 
+    // TODO: Password update and reset.
     doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
     doPasswordUpdate = password =>
         this.auth.currentUser.updatePassword(password);
+
+    // MESSAGE API.
+    doCreateMessage = (uid, message, audio) => {
+        const db = firebase.firestore();
+        db.collection('messages').doc().set({
+            message,
+            audio,
+            createdBy: uid,
+        });
+    };
 }
 
 export default Firebase;
