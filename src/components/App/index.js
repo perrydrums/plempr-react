@@ -4,7 +4,7 @@ import * as ROUTES from '../../constants/routes';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import ChatPage from '../Chat';
-import withAuthentication from '../Session/withAuthentication';
+import { withAuthentication } from '../Session';
 
 const App = () => {
     return (
