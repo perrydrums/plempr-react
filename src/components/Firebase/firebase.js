@@ -40,6 +40,7 @@ class Firebase {
             message,
             audio,
             createdBy: uid,
+            createdOn: Date.now(),
         });
     };
 }
