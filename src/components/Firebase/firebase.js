@@ -43,6 +43,8 @@ class Firebase {
             createdOn: Date.now(),
         });
     };
+
+    getFirestore = () => firebase.firestore();
 }
 
 export default Firebase;
