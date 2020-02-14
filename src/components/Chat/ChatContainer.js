@@ -31,10 +31,16 @@ class ChatContainer extends Component {
     }
 
     render() {
+        const audioElement = new Audio();
+
         const messages = this.state.messages.map(message =>
             <ChatMessage
                 key={message.id}
                 message={message.message}
+                audioFiles={message.audioFiles}
+                createdBy={message.createdBy}
+                createdOn={message.createdOn}
+                audioElement={audioElement}
             />
             );
 
