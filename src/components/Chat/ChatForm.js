@@ -67,11 +67,28 @@ class ChatFormBase extends Component {
     };
 
     // Add word to the message.
-    addWord = event => {
+    addWord = async event => {
         event.preventDefault();
 
-        if (this.state.valid && this.state.currentWord) {
-            this.state.message.push(this.state.currentWord);
+        const word = this.state.currentWord;
+
+        if (this.state.valid && word) {
+            const url = `https://nl.wiktionary.org/api/rest_v1/page/media/${word}`;
+            const response = await fetch(url);
+            const json = await response.json();
+
+            if (Array.isArray(json.items)) {
+                for (const item of json.items) {
+                    if (item.type === 'audio') {
+                        this.state.message.push({
+                            word,
+                            audio: item.original.source,
+                        });
+                        break;
+                    }
+                }
+            }
+
             this.setState({
                 currentWord: '',
                 checkWordInProgress: false,
@@ -88,23 +105,12 @@ class ChatFormBase extends Component {
         let audioFiles = [];
 
         for (const word of this.state.message) {
-            if (easterEggs.indexOf(word) !== -1) {
+            if (easterEggs.indexOf(word.word) !== -1) {
                 audioFiles.push(`/audio/${word}.mp3`);
                 continue;
             }
 
-            const url = `https://nl.wiktionary.org/api/rest_v1/page/media/${word}`;
-            const response = await fetch(url);
-            const json = await response.json();
-
-            if (Array.isArray(json.items)) {
-                for (const item of json.items) {
-                    if (item.type === 'audio') {
-                        audioFiles.push(item.original.source);
-                        break;
-                    }
-                }
-            }
+            audioFiles.push(word.audio);
         }
 
         const uid = this.props.firebase.auth.currentUser.uid;
@@ -115,7 +121,7 @@ class ChatFormBase extends Component {
     };
 
     render() {
-        const message = this.state.message.join(' ');
+        const message = this.state.message.map(word => word.word + ' ');
 
         return (
             <form>
