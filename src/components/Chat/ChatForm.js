@@ -11,6 +11,7 @@ class ChatFormBase extends Component {
             currentWord: '',
             checkWordInProgress: false,
             valid: false,
+            wordInput: null,
         };
     }
 
@@ -67,6 +68,8 @@ class ChatFormBase extends Component {
 
     // Add word to the message.
     addWord = event => {
+        event.preventDefault();
+
         if (this.state.valid && this.state.currentWord) {
             this.state.message.push(this.state.currentWord);
             this.setState({
@@ -76,7 +79,7 @@ class ChatFormBase extends Component {
             });
         }
 
-        event.preventDefault();
+        this.wordInput.focus();
     };
 
     postMessage = async event => {
@@ -107,9 +110,13 @@ class ChatFormBase extends Component {
         const uid = this.props.firebase.auth.currentUser.uid;
 
         this.props.firebase.doCreateMessage(uid, this.state.message.join(' '), audioFiles);
+
+        this.setState({ message: []});
     };
 
     render() {
+        const message = this.state.message.join(' ');
+
         return (
             <form>
                 <input
@@ -118,6 +125,7 @@ class ChatFormBase extends Component {
                     name="message"
                     value={this.state.currentWord}
                     onChange={this.onChange}
+                    ref={(input) => { this.wordInput = input; }}
                 />
                 <button
                     disabled={!this.state.valid}
@@ -131,6 +139,7 @@ class ChatFormBase extends Component {
                 >
                     verstuur
                 </button>
+                <div>{message}</div>
             </form>
         );
     }
