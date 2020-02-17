@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Message, MessageButton} from './styled';
 
 class ChatMessage extends Component {
 
@@ -26,9 +27,9 @@ class ChatMessage extends Component {
 
     render() {
         return (
-            <div>
-                <p onClick={this.playAudio.bind(this)}>PLAY</p>
-            </div>
+            <Message createdByCurrentUser={this.props.createdByCurrentUser}>
+                <MessageButton onClick={this.playAudio.bind(this)} />
+            </Message>
         )
     }
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import easterEggs from '../../constants/easterEggs';
 import {withFirebase} from '../Firebase';
+import {ChatFormInput} from './styled';
 
 class ChatFormBase extends Component {
 
@@ -125,7 +126,7 @@ class ChatFormBase extends Component {
 
         return (
             <form>
-                <input
+                <ChatFormInput
                     type="text"
                     placeholder="typ een woord"
                     name="message"

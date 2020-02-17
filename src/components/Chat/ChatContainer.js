@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {withFirebase} from '../Firebase';
 import ChatMessage from './ChatMessage';
+import {ChatWrapper} from './styled';
 
 class ChatContainer extends Component {
 
     state = {
         messages: [],
+        messagesEnd: null,
     };
 
     constructor(props) {
@@ -30,6 +32,18 @@ class ChatContainer extends Component {
         });
     }
 
+    componentDidMount() {
+        this.scrollToBottom();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.scrollToBottom();
+    }
+
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    };
+
     render() {
         const audioElement = new Audio();
 
@@ -40,14 +54,18 @@ class ChatContainer extends Component {
                 audioFiles={message.audioFiles}
                 createdBy={message.createdBy}
                 createdOn={message.createdOn}
+                createdByCurrentUser={this.props.uid === message.createdBy}
                 audioElement={audioElement}
             />
             );
 
         return (
-            <div>
+            <ChatWrapper>
                 {messages}
-            </div>
+                <div style={{ float: 'left', clear: 'both'}}
+                     ref={e => this.messagesEnd = e}
+                />
+            </ChatWrapper>
         )
     }
 }

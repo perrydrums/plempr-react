@@ -3,6 +3,7 @@ import { AuthUserContext, withAuthorization } from '../Session';
 import SignOutButton from '../SignOut';
 import ChatForm from './ChatForm';
 import ChatContainer from './ChatContainer';
+import {Wrapper} from '../Base/styled';
 
 class ChatPage extends Component {
 
@@ -10,12 +11,12 @@ class ChatPage extends Component {
         return (
             <AuthUserContext.Consumer>
                 {authUser => (
-                    <>
+                    <Wrapper>
                         <h2>Hallo, {authUser.email}</h2>
                         <SignOutButton />
-                        <ChatContainer />
+                        <ChatContainer uid={authUser.uid} />
                         <ChatForm />
-                    </>
+                    </Wrapper>
                 )}
             </AuthUserContext.Consumer>
         )
