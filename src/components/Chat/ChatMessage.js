@@ -28,6 +28,7 @@ class ChatMessage extends Component {
     render() {
         return (
             <Message createdByCurrentUser={this.props.createdByCurrentUser}>
+                {this.props.createdByName}
                 <MessageButton onClick={this.playAudio.bind(this)} />
             </Message>
         )

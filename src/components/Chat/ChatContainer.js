@@ -24,6 +24,7 @@ class ChatContainer extends Component {
                     message: doc.get('message'),
                     audioFiles: doc.get('audio'),
                     createdBy: doc.get('createdBy'),
+                    createdByName: doc.get('createdByName'),
                     createdOn: doc.get('createdOn'),
                 })
             });
@@ -53,6 +54,7 @@ class ChatContainer extends Component {
                 message={message.message}
                 audioFiles={message.audioFiles}
                 createdBy={message.createdBy}
+                createdByName={message.createdByName}
                 createdOn={message.createdOn}
                 createdByCurrentUser={this.props.uid === message.createdBy}
                 audioElement={audioElement}

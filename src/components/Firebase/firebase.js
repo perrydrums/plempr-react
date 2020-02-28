@@ -54,12 +54,14 @@ class Firebase {
     };
 
     // MESSAGE API.
-    doCreateMessage = (uid, message, audio) => {
+    doCreateMessage = async (uid, message, audio) => {
         const db = firebase.firestore();
+        const userData = await this.getUserDataByUid(uid);
         db.collection('messages').doc().set({
             message,
             audio,
             createdBy: uid,
+            createdByName: userData.username,
             createdOn: Date.now(),
         });
     };

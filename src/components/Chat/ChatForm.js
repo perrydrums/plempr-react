@@ -116,7 +116,12 @@ class ChatFormBase extends Component {
 
         const uid = this.props.firebase.auth.currentUser.uid;
 
-        this.props.firebase.doCreateMessage(uid, this.state.message.join(' '), audioFiles);
+        let messageString = '';
+        this.state.message.forEach(w => {
+            messageString += w.word + ' ';
+        });
+
+        await this.props.firebase.doCreateMessage(uid, messageString, audioFiles);
 
         this.setState({ message: []});
     };
