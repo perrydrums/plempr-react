@@ -29,7 +29,7 @@ class ChatMessage extends Component {
         return (
             <Message createdByCurrentUser={this.props.createdByCurrentUser}>
                 <MessageUsername>
-                    {this.props.createdByName}
+                    <strong>{this.props.createdByName}</strong> zegt
                 </MessageUsername>
                 <MessageButton createdByCurrentUser={this.props.createdByCurrentUser}>
                     <MessageArrow onClick={this.playAudio.bind(this)} />
