@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Message, MessageButton} from './styled';
+import {Message, MessageArrow, MessageButton, MessageUsername} from './styled';
 
 class ChatMessage extends Component {
 
@@ -28,8 +28,12 @@ class ChatMessage extends Component {
     render() {
         return (
             <Message createdByCurrentUser={this.props.createdByCurrentUser}>
-                {this.props.createdByName}
-                <MessageButton onClick={this.playAudio.bind(this)} />
+                <MessageUsername>
+                    {this.props.createdByName}
+                </MessageUsername>
+                <MessageButton createdByCurrentUser={this.props.createdByCurrentUser}>
+                    <MessageArrow onClick={this.playAudio.bind(this)} />
+                </MessageButton>
             </Message>
         )
     }
