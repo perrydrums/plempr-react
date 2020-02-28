@@ -12,7 +12,7 @@ class ChatPage extends Component {
             <AuthUserContext.Consumer>
                 {authUser => (
                     <Wrapper>
-                        <h2>Hallo, {authUser.email}</h2>
+                        <h2>Hallo, {authUser.username}</h2>
                         <SignOutButton />
                         <ChatContainer uid={authUser.uid} />
                         <ChatForm />

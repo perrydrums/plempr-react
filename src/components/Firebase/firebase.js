@@ -33,6 +33,26 @@ class Firebase {
     doPasswordUpdate = password =>
         this.auth.currentUser.updatePassword(password);
 
+    // USER DATA API.
+    doCreateUserData = (uid, username) => {
+        const db = firebase.firestore();
+        db.collection('users').doc().set({
+            uid,
+            username,
+        })
+    };
+
+    getUserDataByUid = async uid => {
+        const db = firebase.firestore();
+        const snapshot = await db.collection('users').where('uid', '==', uid).get();
+        let data = {};
+        await snapshot.forEach(doc => {
+            data.uid = uid;
+            data.username = doc.get('username');
+        });
+        return data;
+    };
+
     // MESSAGE API.
     doCreateMessage = (uid, message, audio) => {
         const db = firebase.firestore();
