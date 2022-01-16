@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import easterEggs from '../../constants/easterEggs';
 import {withFirebase} from '../Firebase';
 import {ChatFormInput} from './styled';
 
@@ -31,12 +30,6 @@ class ChatFormBase extends Component {
         }
 
         this.setState({ valid: false });
-
-        // Set valid to TRUE immediately if it's one of the easter eggs.
-        if (easterEggs.indexOf(word) !== -1) {
-            this.setState({ valid: true });
-            return;
-        }
 
         // Check if the word exists in the API.
         try {
@@ -105,11 +98,6 @@ class ChatFormBase extends Component {
         let audioFiles = [];
 
         for (const word of this.state.message) {
-            if (easterEggs.indexOf(word.word) !== -1) {
-                audioFiles.push(`/audio/${word}.mp3`);
-                continue;
-            }
-
             audioFiles.push(word.audio);
         }
 
