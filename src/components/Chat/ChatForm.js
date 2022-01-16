@@ -5,11 +5,18 @@ import {ChatFormInput} from './styled';
 
 class ChatFormBase extends Component {
 
+    fetchParams = {
+        headers: {
+            'Accept': 'application/json',
+        }
+    };
+
     constructor(props) {
         super(props);
         this.state = {
             message: [],
             currentWord: '',
+            currentAudioFile: '',
             checkWordInProgress: false,
             valid: false,
             wordInput: null,
@@ -33,14 +40,20 @@ class ChatFormBase extends Component {
 
         // Check if the word exists in the API.
         try {
-            const url = `https://nl.wiktionary.org/api/rest_v1/page/media/${word}`;
-            const response = await fetch(url);
+            const url = `https://nl.wiktionary.org/api/rest_v1/page/media-list/${word}`;
+
+            const response = await fetch(url, this.fetchParams);
             const json = await response.json();
 
-            if (Array.isArray(json.items)) {
-                for (const item of json.items) {
-                    if (item.type === 'audio') {
-                        this.setState({ valid: true });
+            if (json.items) {
+                for (const mediaFile of json.items) {
+                    if (mediaFile.type === 'audio') {
+                        const fileUri = mediaFile.title;
+                        const fileName = fileUri.split(':')[1];
+                        this.setState({
+                            currentAudioFile: `https://nl.wiktionary.org/wiki/Special:FilePath/${fileName}`,
+                            valid: true,
+                        });
                         break;
                     }
                 }
@@ -71,31 +84,17 @@ class ChatFormBase extends Component {
     addWord = async event => {
         event.preventDefault();
 
-        const word = this.state.currentWord;
+        this.state.message.push({
+            word: this.state.currentWord,
+            audio: this.state.currentAudioFile,
+        });
 
-        if (this.state.valid && word) {
-            const url = `https://nl.wiktionary.org/api/rest_v1/page/media/${word}`;
-            const response = await fetch(url);
-            const json = await response.json();
-
-            if (Array.isArray(json.items)) {
-                for (const item of json.items) {
-                    if (item.type === 'audio') {
-                        this.state.message.push({
-                            word,
-                            audio: item.original.source,
-                        });
-                        break;
-                    }
-                }
-            }
-
-            this.setState({
-                currentWord: '',
-                checkWordInProgress: false,
-                valid: false,
-            });
-        }
+        this.setState({
+            currentWord: '',
+            currentAudioFile: '',
+            checkWordInProgress: false,
+            valid: false,
+        });
 
         this.wordInput.focus();
     };
