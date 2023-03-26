@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const ChatWrapper = styled.div`
 
@@ -13,9 +13,9 @@ export const ChatWrapper = styled.div`
 export const Message = styled.div`
 
   width: 60%;
-  float: ${props => props.createdByCurrentUser ? 'right' : 'left'};
+  float: ${(props) => (props.createdByCurrentUser ? 'right' : 'left')};
   display: block;
-  text-align: ${props => props.createdByCurrentUser ? 'right' : 'left'};
+  text-align: ${(props) => (props.createdByCurrentUser ? 'right' : 'left')};
 
 `;
 
@@ -34,7 +34,7 @@ export const MessageButton = styled.div`
   border: 1px solid black;
   border-radius: 50%;
 
-  float: ${props => props.createdByCurrentUser ? 'right' : 'left'};
+  float: ${(props) => (props.createdByCurrentUser ? 'right' : 'left')};
 
   display: flex;
   justify-content: center;
