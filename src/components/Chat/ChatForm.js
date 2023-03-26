@@ -117,7 +117,7 @@ class ChatFormBase extends Component {
           placeholder="typ een woord"
           name="message"
           onChange={this.onChange}
-          ref={(input) => { this.state.inputRef = input; }}
+          ref={(inputRef) => this.setState({ inputRef })}
         />
         <div>{preview}</div>
         <button
