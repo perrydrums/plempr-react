@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ChatWrapper = styled.div`
 
-  width: 90%;
+  width: 100%;
   height: 70vh;
   margin: 10px auto;
 
@@ -22,7 +22,7 @@ export const Message = styled.div`
 export const MessageUsername = styled.div`
 
   display: inline-block;
-  margin: 30px 5px;
+  margin: 22px 5px;
 
 `;
 

@@ -30,9 +30,13 @@ class ChatMessage extends Component {
     return (
       <Message createdByCurrentUser={this.props.createdByCurrentUser}>
         <MessageUsername>
+          [{this.props.langcode}]&nbsp;
           <strong>{this.props.createdByName}</strong>
           {' '}
-          zegt
+          zegt<br/>
+          <span style={{ color: '#909090', fontSize: '.75em'}}>
+            {new Date(this.props.createdOn).toLocaleDateString()} om {new Date(this.props.createdOn).toLocaleTimeString()}
+          </span>
         </MessageUsername>
         <MessageButton createdByCurrentUser={this.props.createdByCurrentUser}>
           <MessageArrow onClick={this.playAudio.bind(this)} />

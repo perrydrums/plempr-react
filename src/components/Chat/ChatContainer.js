@@ -22,6 +22,7 @@ class ChatContainer extends Component {
           id: doc.id,
           message: doc.get('message'),
           audioFiles: doc.get('audio'),
+          langcode: doc.get('langcode') || 'nl',
           createdBy: doc.get('createdBy'),
           createdByName: doc.get('createdByName'),
           createdOn: doc.get('createdOn'),
@@ -52,6 +53,7 @@ class ChatContainer extends Component {
         key={message.id}
         message={message.message}
         audioFiles={message.audioFiles}
+        langcode={message.langcode}
         createdBy={message.createdBy}
         createdByName={message.createdByName}
         createdOn={message.createdOn}

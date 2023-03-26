@@ -15,6 +15,7 @@ class ChatFormBase extends Component {
       message: [],
       words: [],
       valid: false,
+      langcode: 'nl',
     };
   }
 
@@ -26,7 +27,7 @@ class ChatFormBase extends Component {
       if (!word.valid) {
         // Check if the word exists in the API.
         try {
-          const url = `https://nl.wiktionary.org/api/rest_v1/page/media-list/${word.word}`;
+          const url = `https://${this.state.langcode}.wiktionary.org/api/rest_v1/page/media-list/${word.word}`;
 
           const response = await fetch(url, this.fetchParams);
           const json = await response.json();
@@ -36,7 +37,7 @@ class ChatFormBase extends Component {
               if (mediaFile.type === 'audio') {
                 const fileUri = mediaFile.title;
                 const fileName = fileUri.split(':')[1];
-                word.audio = `https://nl.wiktionary.org/wiki/Special:FilePath/${fileName}`;
+                word.audio = `https://${this.state.langcode}.wiktionary.org/wiki/Special:FilePath/${fileName}`;
                 word.valid = true;
                 break;
               }
@@ -73,7 +74,7 @@ class ChatFormBase extends Component {
       messageString += `${w.word} `;
     });
 
-    await this.props.firebase.doCreateMessage(uid, messageString, audioFiles);
+    await this.props.firebase.doCreateMessage(uid, messageString, audioFiles, this.state.langcode);
 
     this.setState({ words: [] });
     this.inputRef.value = '';
@@ -100,13 +101,10 @@ class ChatFormBase extends Component {
   render() {
     // Invalid words are red.
     const preview = this.state.words.map((word) => {
-      if (word.valid === true) {
-        return word.word + ' ';
-      } else if (word.valid === false) {
-        return <span style={{ color: 'red' }}>{word.word} </span>;
-      } else {
-        return '';
+      if ('valid' in word) {
+        return <span style={{ color: word.valid ? 'green' : 'red' }}>{word.word} </span>;
       }
+      return '';
     });
 
     return (
@@ -125,6 +123,11 @@ class ChatFormBase extends Component {
         >
           verstuur
         </button>
+        <select onChange={(e) => this.setState({ langcode: e.target.value })}>
+          <option value="nl">Nederlands</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
       </form>
     );
   }
