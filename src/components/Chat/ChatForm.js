@@ -14,7 +14,6 @@ class ChatFormBase extends Component {
     this.state = {
       message: [],
       words: [],
-      inputRef: null,
       valid: false,
     };
   }
@@ -77,7 +76,7 @@ class ChatFormBase extends Component {
     await this.props.firebase.doCreateMessage(uid, messageString, audioFiles);
 
     this.setState({ words: [] });
-    this.state.inputRef.value = '';
+    this.inputRef.value = '';
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -117,7 +116,7 @@ class ChatFormBase extends Component {
           placeholder="typ een woord"
           name="message"
           onChange={this.onChange}
-          ref={(inputRef) => this.setState({ inputRef })}
+          ref={(inputRef) => { this.inputRef = inputRef; }}
         />
         <div>{preview}</div>
         <button
