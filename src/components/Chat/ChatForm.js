@@ -37,7 +37,12 @@ class ChatFormBase extends Component {
               if (mediaFile.type === 'audio') {
                 const fileUri = mediaFile.title;
                 const fileName = fileUri.split(':')[1];
-                word.audio = `https://${this.state.langcode}.wiktionary.org/wiki/Special:FilePath/${fileName}`;
+                const originalAudioUrl = `https://${this.state.langcode}.wiktionary.org/wiki/Special:FilePath/${fileName}`;
+                const fileNameMp3 = fileName.replace('.ogg', '.mp3');
+                const vercelUrl = `${process.env.REACT_APP_VERCEL_URL}/api/convert?fileName=${fileNameMp3}&url=${originalAudioUrl}`;
+                const convertResponse = await fetch(vercelUrl, this.fetchParams);
+                const convertJson = await convertResponse.json();
+                word.audio = convertJson.url;
                 word.valid = true;
                 break;
               }
