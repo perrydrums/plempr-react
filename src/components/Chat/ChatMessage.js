@@ -18,7 +18,7 @@ class ChatMessage extends Component {
   canPlay() {
     const { audioFiles } = this.props;
     const onIOS = this.iOS();
-    return audioFiles.every((audioFile) => audioFile.includes('.mp3')) || !onIOS;
+    return audioFiles.every((audioFile) => !audioFile.includes('.ogg')) || !onIOS;
   }
 
   // Play the audio files in sequence.
