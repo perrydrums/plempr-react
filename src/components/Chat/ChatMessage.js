@@ -4,6 +4,23 @@ import {
 } from './styled';
 
 class ChatMessage extends Component {
+  iOS() {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+  }
+
+  canPlay() {
+    const { audioFiles } = this.props;
+    const onIOS = this.iOS();
+    return audioFiles.every((audioFile) => audioFile.includes('.mp3')) || !onIOS;
+  }
+
   // Play the audio files in sequence.
   playAudio() {
     const { audioFiles, audioElement } = this.props;
@@ -39,7 +56,10 @@ class ChatMessage extends Component {
           </span>
         </MessageUsername>
         <MessageButton createdByCurrentUser={this.props.createdByCurrentUser}>
-          <MessageArrow onClick={this.playAudio.bind(this)} />
+          <MessageArrow
+            onClick={this.playAudio.bind(this)}
+            style={{ borderLeftColor: this.canPlay() ? 'dodgerblue' : 'red' }}
+          />
         </MessageButton>
       </Message>
     );
