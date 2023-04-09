@@ -105,9 +105,14 @@ class ChatFormBase extends Component {
 
   render() {
     // Invalid words are red.
-    const preview = this.state.words.map((word) => {
+    const preview = this.state.words.map((word, index) => {
       if ('valid' in word) {
-        return <span style={{ color: word.valid ? 'green' : 'red' }}>{word.word} </span>;
+        return <span
+          style={{ color: word.valid ? 'green' : 'red' }}
+          key={word.word + index}
+        >
+          {word.word + ' '}
+        </span>;
       }
       return '';
     });

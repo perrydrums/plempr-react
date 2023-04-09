@@ -45,6 +45,11 @@ class ChatContainer extends Component {
     this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   };
 
+  deleteMessage = (messageId) => {
+    const db = this.props.firebase.getFirestore();
+    db.collection('messages').doc(messageId).delete();
+  }
+
   render() {
     const audioElement = new Audio();
 
@@ -59,6 +64,7 @@ class ChatContainer extends Component {
         createdOn={message.createdOn}
         createdByCurrentUser={this.props.uid === message.createdBy}
         audioElement={audioElement}
+        deleteMessage={() => this.deleteMessage(message.id)}
       />
     ));
 

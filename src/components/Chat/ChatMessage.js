@@ -4,6 +4,14 @@ import {
 } from './styled';
 
 class ChatMessage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDeleteButton: false,
+    };
+  }
+
   iOS() {
     return [
       'iPad Simulator',
@@ -45,7 +53,10 @@ class ChatMessage extends Component {
 
   render() {
     return (
-      <Message createdByCurrentUser={this.props.createdByCurrentUser}>
+      <Message createdByCurrentUser={this.props.createdByCurrentUser}
+               onMouseOver={() => this.setState({ showDeleteButton: true })}
+               onMouseLeave={() => this.setState({ showDeleteButton: false })}
+      >
         <MessageUsername>
           [{this.props.langcode}]&nbsp;
           <strong>{this.props.createdByName}</strong>
@@ -54,6 +65,19 @@ class ChatMessage extends Component {
           <span style={{ color: '#909090', fontSize: '.75em'}}>
             {new Date(this.props.createdOn).toLocaleDateString()} om {new Date(this.props.createdOn).toLocaleTimeString()}
           </span>
+        {/* if hovering over message show delete button */}
+        {this.state.showDeleteButton && this.props.createdByCurrentUser && (
+          <>
+            <br/>
+            <span
+              style={{ fontSize: '.75em', color: 'red', cursor: 'pointer' }}
+              onClick={this.props.deleteMessage}
+            >
+              Verwijder
+            </span>
+          </>
+        )}
+
         </MessageUsername>
         <MessageButton createdByCurrentUser={this.props.createdByCurrentUser}>
           <MessageArrow

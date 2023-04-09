@@ -12,6 +12,7 @@ export const ChatWrapper = styled.div`
 
 export const Message = styled.div`
 
+  max-height: 83px;
   width: 60%;
   float: ${(props) => (props.createdByCurrentUser ? 'right' : 'left')};
   display: block;
