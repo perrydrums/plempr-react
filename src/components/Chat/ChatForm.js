@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withFirebase} from '../Firebase';
-import {ChatFormInput} from './styled';
+import {ChatFormInput, LoadingSpinner} from './styled';
 
 class ChatFormBase extends Component {
   fetchParams = {
@@ -16,6 +16,7 @@ class ChatFormBase extends Component {
       words: [],
       valid: false,
       langcode: 'nl',
+      sending: false,
     };
   }
 
@@ -37,12 +38,7 @@ class ChatFormBase extends Component {
               if (mediaFile.type === 'audio') {
                 const fileUri = mediaFile.title;
                 const fileName = fileUri.split(':')[1];
-                const originalAudioUrl = `https://${this.state.langcode}.wiktionary.org/wiki/Special:FilePath/${fileName}`;
-                const fileNameMp3 = fileName.replace('.ogg', '.mp3');
-                const vercelUrl = `${process.env.REACT_APP_VERCEL_URL}/api/convert?fileName=${fileNameMp3}&url=${originalAudioUrl}`;
-                const convertResponse = await fetch(vercelUrl, this.fetchParams);
-                const convertJson = await convertResponse.json();
-                word.audio = convertJson.url;
+                word.originalAudio = `https://${this.state.langcode}.wiktionary.org/wiki/Special:FilePath/${fileName}`;
                 word.valid = true;
                 break;
               }
@@ -66,10 +62,12 @@ class ChatFormBase extends Component {
   postMessage = async (event) => {
     event.preventDefault();
 
+    this.setState({ sending: true });
+
     const audioFiles = [];
 
     for (const word of this.state.words) {
-      audioFiles.push(word.audio);
+      audioFiles.push(word.originalAudio);
     }
 
     const { uid } = this.props.firebase.auth.currentUser;
@@ -80,6 +78,8 @@ class ChatFormBase extends Component {
     });
 
     await this.props.firebase.doCreateMessage(uid, messageString, audioFiles, this.state.langcode);
+
+    this.setState({ sending: false });
 
     this.setState({ words: [] });
     this.inputRef.value = '';
@@ -128,6 +128,7 @@ class ChatFormBase extends Component {
         >
           verstuur
         </button>
+        {this.state.sending && <LoadingSpinner/>}
         <select onChange={(e) => this.setState({ langcode: e.target.value })}>
           <option value="nl">Nederlands</option>
           <option value="en">English</option>

@@ -72,3 +72,30 @@ export const ChatFormInput = styled.input`
   border-bottom: 1px solid black;
 
 `;
+
+export const LoadingSpinner = styled.div`
+  
+  width: 20px;
+  height: 20px;
+  margin: 0 5px;
+  border-top: 3px solid dodgerblue;
+  border-radius: 50%;
+  animation: spin 5s cubic-bezier(.8, .14, .8, .3) alternate infinite;
+  display: inline-block;
+  
+  @keyframes spin {
+    0% { 
+      transform: rotate(0deg);
+      opacity: 1;
+    }
+    75% {
+      opacity: .75;
+    }
+    100% { 
+      transform: rotate(3600deg);
+      opacity: 0;
+    }
+  }
+
+`;
+

@@ -54,7 +54,18 @@ class Firebase {
   doCreateMessage = async (uid, message, audio, langcode) => {
     const db = firebase.firestore();
     const userData = await this.getUserDataByUid(uid);
-    db.collection('messages').doc().set({
+
+    // Convert audio files.
+    for (const [index, originalAudio] of audio.entries()) {
+      const fileName = originalAudio.split('/').pop();
+      const fileNameMp3 = fileName.replace('.ogg', '.mp3');
+      const convertedFileUrl = `${process.env.REACT_APP_VERCEL_URL}/api/convert?fileName=${fileNameMp3}&url=${originalAudio}`;
+      const convertResponse = await fetch(convertedFileUrl);
+      const convertJson = await convertResponse.json();
+      audio[index] = convertJson.url;
+    }
+
+    await db.collection('messages').doc().set({
       message,
       audio,
       langcode,
